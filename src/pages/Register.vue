@@ -1,75 +1,119 @@
 <template>
     <div class="register">
      <div>
-      <form >
+      <form>
         <div>
-          <label for="email">Email:</label>
-          <input type="email" name="email" />
+          <label for="Email">Email:</label>
+          <input type="email" v-model="Email" id="Email" />
         </div>
         <div>
-          <label for="username">Username:</label>
-          <input type="text" name="username" />
+          <label for="UserName">Логін:</label>
+          <input type="text" v-model="UserName" id="UserName" />
         </div>
         <div>
-          <label for="Surname">Surname:</label>
-          <input type="text" name="Surname" />
+          <label for="Name">Ім'я:</label>
+          <input type="text" v-model="Name" id="Name" />
         </div>
         <div>
-          <label for="middle_name">Middle name:</label>
-          <input type="text" name="middle_name" />
+          <label for="Surname">Призвіще:</label>
+          <input type="text" v-model="Surname" id="Surname" />
         </div>
         <div>
-          <label for="password">Password:</label>
-          <input type="password" name="password" />
+          <label for="MiddleName">По батькові:</label>
+          <input type="text" v-model="MiddleName" id="MiddleName" />
         </div>
         <div>
-          <label for="confirm_password">Confirm password:</label>
-          <input type="password" name="confirm_password" />
+          <label for="Password">Пароль:</label>
+          <input type="password" v-model="Password" id="Password" />
         </div>
-        <button type="submit">Submit</button>
+        <div>
+          <label for="ConfirmPassword">Підтвердіть пароль:</label>
+          <input type="password" v-model="ConfirmPassword" id="ConfirmPassword" />
+        </div>
+        <button @click="formSubmit" type="submit">Зареєструватись</button>
       </form>
     </div>
+    <p v-if="showError" id="error">Username already exists</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+// import router from '../router'
 export default {
-    
+  data(){
+    return {
+      Email: "",
+      UserName: "",
+      Name: "",
+      Surname: "",
+      MiddleName: "",
+      Password: "",
+      ConfirmPassword: "",
+      showError: false
+    }
+  },
+  methods: {
+    formSubmit() {
+      axios.post('https://localhost:44306/api/Account/Register', {
+        Email: this.Email,
+        UserName: this.UserName,
+        Name: this.Name,
+        Surname: this.Surname,
+        MiddleName: this.MiddleName,
+        Password: this.Password,
+        ConfirmPassword: this.ConfirmPassword 
+      })
+      .then(() => {
+        this.$router.push('/')
+      })
+      .catch((err) => {
+        alert(err)
+      })
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-* {
-  box-sizing: border-box;
-}
-.register {
-    width: 40%;
-    margin: 0 auto;
-}
-label {
-  padding: 12px 12px 12px 0;
-  display: inline-block;
-}
-form div {
-    display: flex;
-    justify-content: space-between;
-}
-button[type="submit"] {
-  background-color: #4caf50;
-  color: white;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 30px;
-  margin-top: 20px;
-}
-button[type="submit"]:hover {
-  background-color: #45a049;
-}
-input {
-  margin: 5px;
-  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-  padding: 10px;
-  border-radius: 30px;
-}
+    * {
+        box-sizing: border-box;
+    }
+    .register {
+        width: 400px;
+        margin: 0 auto;
+    }
+    label {
+        padding: 15px 12px 12px 0;
+        margin-left: auto;
+    }
+    form div {
+        display: flex;
+        justify-content: space-between;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+    button[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px 20px;
+        cursor: pointer;
+        border-radius: 30px;
+        margin-top: 20px;
+        font-size: 18px;
 
+        &:hover {
+            background-color: #45a049;
+        }
+    }
+    input {
+        margin: 5px;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        padding: 10px;
+        border-radius: 10px;
+
+        &:focus {
+            outline: none;
+        }
+    }
 </style>

@@ -1,0 +1,62 @@
+import axios from "axios";
+
+const state = {
+  user: null,
+  posts: null,
+};
+
+const getters = {
+  isAuthenticated: (state) => !!state.user,
+  StatePosts: (state) => state.posts,
+  StateUser: (state) => state.user,
+};
+
+const actions = {
+  async Register({dispatch}, form) {
+    await axios.post('https://localhost:44306/api/Account/Register', form)
+    let UserForm = new FormData()
+    UserForm.append('UserName', form.UserName)
+    UserForm.append('Password', form.Password)
+    await dispatch('LogIn', UserForm)
+  },
+
+  async LogIn({commit}, user) {
+    await axios.post("https://localhost:44306/token", user);
+    await commit("setUser", user.get("UserName"));
+  },
+
+  async CreatePost({ dispatch }, post) {
+    await axios.post("post", post);
+    return await dispatch("GetPosts");
+  },
+
+  async GetPosts({ commit }) {
+    let response = await axios.get("posts");
+    commit("setPosts", response.data);
+  },
+
+  async LogOut({ commit }) {
+    let user = null;
+    commit("logout", user);
+  },
+};
+
+const mutations = {
+  setUser(state, UserName) {
+    state.user = UserName;
+  },
+
+  setPosts(state, posts) {
+    state.posts = posts;
+  },
+  logout(state, user) {
+    state.user = user;
+  },
+};
+
+export default {
+  state,
+  getters,
+  actions,
+  mutations,
+};

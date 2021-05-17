@@ -1,12 +1,14 @@
 <template>
     <div>
         <div class="navbar">
-            <ul>
+            <div class="container">
+                <ul>
                 <router-link tag="li" to="/">Home</router-link>
                 <router-link tag="li" to="/posts">Posts</router-link>
                 <router-link tag="li" to="/register">Register</router-link>
                 <router-link tag="li" to="/login">Login</router-link>
-            </ul>
+                </ul>
+            </div>
         </div>
         <router-view />
     </div>
@@ -20,6 +22,11 @@ export default {
 </script>
 
 <style lang="scss">
+    .container {
+        max-width: 1170px;
+        margin: auto;
+    }
+
     .navbar {
         background-color: #4caf50;
         margin-bottom: 50px;
@@ -29,7 +36,7 @@ export default {
         list-style: none;
         display: flex;
         justify-content: space-between;
-        width: 50%;
+        width: 400px;
         li{
             text-transform: uppercase;
             font-family: Roboto, sans-serif;
