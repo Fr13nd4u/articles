@@ -1,7 +1,7 @@
 <template>
     <div class="register">
-     <div>
-      <form>
+      <h1>Реєстрація</h1>
+      <form @submit.prevent="">
         <div>
           <label for="Email">Email:</label>
           <input type="email" v-model="Email" id="Email" />
@@ -32,14 +32,13 @@
         </div>
         <button @click="formSubmit" type="submit">Зареєструватись</button>
       </form>
-    </div>
-    <p v-if="showError" id="error">Username already exists</p>
+    <p v-if="showError" id="error">Ви неправильно ввели данні, попробуйте ще</p>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-// import router from '../router'
+
 export default {
   data(){
     return {
@@ -54,8 +53,8 @@ export default {
     }
   },
   methods: {
-    formSubmit() {
-      axios.post('https://localhost:44306/api/Account/Register', {
+    async formSubmit() {
+      await axios.post('https://localhost:44306/api/Account/Register', {
         Email: this.Email,
         UserName: this.UserName,
         Name: this.Name,
@@ -65,10 +64,13 @@ export default {
         ConfirmPassword: this.ConfirmPassword 
       })
       .then(() => {
-        this.$router.push('/')
+        this.showError = false;
       })
-      .catch((err) => {
-        alert(err)
+      .then(() => {
+        this.$router.push("Login")
+      })
+      .catch(() => {
+        this.showError = true;
       })
     }
   }
@@ -76,44 +78,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    * {
-        box-sizing: border-box;
-    }
-    .register {
-        width: 400px;
-        margin: 0 auto;
-    }
-    label {
-        padding: 15px 12px 12px 0;
-        margin-left: auto;
-    }
-    form div {
-        display: flex;
-        justify-content: space-between;
-        text-transform: uppercase;
-        font-weight: 700;
-    }
-    button[type="submit"] {
-        background-color: #4caf50;
-        color: white;
-        padding: 12px 20px;
-        cursor: pointer;
-        border-radius: 30px;
-        margin-top: 20px;
-        font-size: 18px;
+  * {
+    box-sizing: border-box;
+  }
+  h1 {
+    margin-bottom: 30px;
+  }
+  .register {
+    width: 400px;
+    margin: 0 auto;
+  }
+  label {
+    padding: 15px 12px 12px 0;
+    margin-left: auto;
+  }
+  form div {
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 30px;
+    margin-top: 20px;
+    font-size: 18px;
 
-        &:hover {
-            background-color: #45a049;
-        }
+    &:hover {
+      background-color: #45a049;
     }
-    input {
-        margin: 5px;
-        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
-        padding: 10px;
-        border-radius: 10px;
+  }
+  input {
+    margin: 5px;
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+    padding: 10px;
+    border-radius: 10px;
 
-        &:focus {
-            outline: none;
-        }
+    &:focus {
+      outline: none;
     }
+  }
+  #error {
+    color: rgb(230, 1, 1);
+    margin-top: 30px;
+    font-weight: 600;
+  }
 </style>

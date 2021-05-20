@@ -3,10 +3,10 @@
         <div class="navbar">
             <div class="container">
                 <ul>
-                <router-link tag="li" to="/">Home</router-link>
-                <router-link tag="li" to="/posts">Posts</router-link>
-                <router-link tag="li" to="/register">Register</router-link>
-                <router-link tag="li" to="/login">Login</router-link>
+                <router-link tag="li" to="/">Головна</router-link>
+                <router-link tag="li" to="/posts">Публікації</router-link>
+                <router-link tag="li" to="/register">Реєстрація</router-link>
+                <router-link tag="li" to="/login">Вхід</router-link>
                 </ul>
             </div>
         </div>
