@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     async formSubmit() {
-      await axios.post('https://localhost:44306/api/Account/Register', {
+      await axios.post('Api/Account/Register', {
         Email: this.Email,
         UserName: this.UserName,
         Name: this.Name,

@@ -18,8 +18,7 @@ export default {
         }
     },
     mounted() {
-        axios
-        .get('https://localhost:44306/api/Publication/Get/')
+        axios.get('api/Publication/Get/')
         .then(res => (this.posts = res.data))
         .catch(err => {
             console.log(err);

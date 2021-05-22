@@ -16,35 +16,64 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
   data() {
       return {
         userName: "",
-        Password: "",
-        // grant_type: "password"
+        Password: ""
       }
   },
   methods: {
     async logIn() {
-      // const headers = { 
-      //   'Content-Type': 'form-data'
-      // };
+      const axios = require('axios')
 
-      await axios.post('https://localhost:44306/token', {
-        userName: this.userName,
-        Password: this.Password,
-        grant_type: "password"
-      })
-      .then(resp => {
-        console.log(resp)
+      const params = new URLSearchParams()
+      params.append( 'userName', this.userName)
+      params.append( 'Password', this.Password)
+      params.append('grant_type', 'password')
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+
+      await axios.post('token', params, config)
+      .then(response => {
+        localStorage.setItem('access_token' , response.data.access_token)
       })
       .then(() => {
         this.$router.push("Posts")
       })
-      // .catch(err => {
-      //     console.log(err)
+      .catch(error => {
+        console.log('Error', error.message);
+      })
+      
+      // axios.post('https://diplommustafaiev.azurewebsites.net/token', {
+      //   userName: this.userName,
+      //   Password: this.Password,
+      //   grant_type: 'password'
+      // },{ 
+      //     headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   } 
+      // })
+      // .then(response => {
+      //   console.log(response)
+      // })
+      // .then(() => {
+      //   this.$router.push("Posts")
+      // })
+      // .catch(error => {
+      //   if (error.response) {
+      //     console.log(error.response.data);
+      //     console.log(error.response.status);
+      //     console.log(error.response.headers);
+      //   } else if (error.request) {
+      //     console.log(error.request);
+      //   } else {
+      //     console.log('Error', error.message);
+      //   }
       // })
     }
   }
