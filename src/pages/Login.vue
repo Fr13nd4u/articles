@@ -12,6 +12,7 @@
         </div>
         <button type="submit" >Вхід</button>
       </form>
+      <p v-if="showError" id="error">Ви неправильно ввели данні, попробуйте ще раз</p>
     </div>
 </template>
 
@@ -20,7 +21,8 @@ export default {
   data() {
       return {
         userName: "",
-        Password: ""
+        Password: "",
+        showError: false
       }
   },
   methods: {
@@ -39,14 +41,14 @@ export default {
       }
 
       await axios.post('token', params, config)
-      .then(response => {
-        localStorage.setItem('access_token' , response.data.access_token)
-      })
-      .then(() => {
+      .then(res => {
+        localStorage.setItem('access_token' , res.data.access_token);
+        localStorage.setItem('userName' , res.data.userName);
+        this.showError = false;
         this.$router.push("Posts")
       })
-      .catch(error => {
-        console.log('Error', error.message);
+      .catch(() => {
+        this.showError = true;
       })
       
       // axios.post('https://diplommustafaiev.azurewebsites.net/token', {

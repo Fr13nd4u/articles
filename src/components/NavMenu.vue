@@ -2,12 +2,15 @@
     <div>
         <div class="navbar">
             <div class="container">
-                <ul>
-                <router-link tag="li" to="/">Головна</router-link>
-                <router-link tag="li" to="/posts">Публікації</router-link>
-                <router-link tag="li" to="/register">Реєстрація</router-link>
-                <router-link tag="li" to="/login">Вхід</router-link>
-                </ul>
+                <div class="navbar-menu">
+                    <ul>
+                        <router-link tag="li" to="/">Головна</router-link>
+                        <router-link tag="li" to="/posts">Публікації</router-link>
+                        <router-link tag="li" to="/register">Реєстрація</router-link>
+                        <router-link tag="li" to="/login">Вхід</router-link>
+                    </ul>
+                    <p>Вітаю{{isUser}}</p>
+                </div>
             </div>
         </div>
         <router-view />
@@ -17,7 +20,19 @@
 <script>
 
 export default {
- 
+    data() {
+        return {
+            isUser: ''
+        }
+    },
+    mounted() {
+        // if (localStorage.getItem('access_token')) {
+        //     this.isUser = localStorage.getItem('userName');
+        // }
+        localStorage.getItem('access_token') 
+        ? this.isUser = `, ${localStorage.getItem('userName') }`
+        : this.isUser = ''
+    }
 }
 </script>
 
@@ -30,6 +45,17 @@ export default {
     .navbar {
         background-color: #4caf50;
         margin-bottom: 50px;
+
+        &-menu {
+            display: flex;
+            justify-content: space-between;
+
+            p {
+                font-size: 16px;
+                color: #fff;
+                padding: 15px 20px;
+            }
+        }
     }
 
     ul {
@@ -40,7 +66,7 @@ export default {
         li{
             text-transform: uppercase;
             font-family: Roboto, sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             color: #fff;
             padding: 15px 20px;
             cursor: pointer;

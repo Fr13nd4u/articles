@@ -65,8 +65,6 @@ export default {
       })
       .then(() => {
         this.showError = false;
-      })
-      .then(() => {
         this.$router.push("Login")
       })
       .catch(() => {
