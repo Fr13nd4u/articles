@@ -25,7 +25,7 @@ export default {
             isUser: ''
         }
     },
-    mounted() {
+    created() {
         // if (localStorage.getItem('access_token')) {
         //     this.isUser = localStorage.getItem('userName');
         // }
@@ -44,7 +44,10 @@ export default {
 
     .navbar {
         background-color: #4caf50;
-        margin-bottom: 50px;
+        overflow: hidden;
+        position: fixed; 
+        top: 0; 
+        width: 100%; 
 
         &-menu {
             display: flex;

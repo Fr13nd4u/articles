@@ -46,6 +46,7 @@ export default {
         localStorage.setItem('userName' , res.data.userName);
         this.showError = false;
         this.$router.push("Posts")
+        window.location.reload();
       })
       .catch(() => {
         this.showError = true;
@@ -87,7 +88,7 @@ export default {
     box-sizing: border-box;
   }
   h1 {
-    margin-bottom: 30px;
+    margin: 100px 0 30px 0;
   }
   .login {
     width: 400px;

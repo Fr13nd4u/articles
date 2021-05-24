@@ -80,7 +80,7 @@ export default {
     box-sizing: border-box;
   }
   h1 {
-    margin-bottom: 30px;
+    margin: 100px 0 30px 0;
   }
   .register {
     width: 400px;
