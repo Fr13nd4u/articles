@@ -1,30 +1,62 @@
 <template>
     <div>
         <div class="container">
-
             <h1>Публікації</h1>
             <div v-if="loading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-            <!-- <div v-for="item in posts" :key="item.id">
-                <h4>{{item.Name}}</h4>
-                <p>{{item.Text}}</p>
-                <p>дата:{{item.Date.slice(0, -11)}} час:{{item.Date.slice(11,-5)}}</p>
-                <hr>
-            </div> -->
-            
+
             <div v-for="item in posts" :key="item.id">
                 <article class="blog-card">
+
+                    <button class="show-modal" id="show-modal" @click="showModal = true">
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            width="35px" height="20px" viewBox="0 0 459 459" style="enable-background:new 0 0 459 459;" xml:space="preserve">
+                            <g id="unfold-more">
+                                <path d="M229.5,71.4l81.6,81.6l35.7-35.7L229.5,0L112.2,117.3l35.7,35.7L229.5,71.4z M229.5,387.6L147.9,306l-35.7,35.7L229.5,459
+                                    l117.3-117.3L311.1,306L229.5,387.6z"/>
+                            </g>
+                        </svg>
+                    </button>
+                    <transition name="fade" appear>
+                        <div 
+                            class="modal-ovarlay" 
+                            v-if="showModal" 
+                            @click="showModal = false">
+                            
+                        </div>
+                    </transition>
+                    <transition name="slide" appear>
+                        <div class="modal" v-if="showModal" >
+                            <h2>Додаткова інформація</h2>
+                            <p>Журнал: {{item.Publication.Journal.Name}}</p>
+                            <p>Мова: {{item.Publication.Language}}</p>
+                            <p>Посилання на статю web of science: <a href="#">{{item.Publication.WebOfScienceLink}}</a></p>
+                            <p>Посилання на статю sqopus: <a href="#">{{item.Publication.SqopusLink}}</a></p>
+                            <p>Конференція: {{item.Publication.Conference.Name}}</p>
+                            <p>Кількість сторінок: {{item.Publication.NumberOfPages}}</p>
+                            <button class="hide-modal" @click="showModal = false">Закрити</button>
+                        </div>
+                    </transition>
+
                     <div class="blog-card__head">
-                        <h4 class="user">ім'я користувача</h4>
+                        <h4 class="user">{{`${item.User.Name} ${item.User.MiddleName} ${item.User.Surname}`}}</h4>
                         <div class="time">
-                            <p>дата: {{item.Date.slice(0, -11)}}</p>
-                            <p>час: {{item.Date.slice(11,-5)}}</p>
+                            <p>час: {{item.Publication.Date.slice(11,-5)}}</p>
+                            <p>дата: {{item.Publication.Date.slice(0, -11)}}</p>
                         </div>
                     </div>
                     <div class="blog-card__info">
-                        <h5 class="title">{{item.Name}}</h5>
-                        <p class="text">{{item.Text}}</p>
-                        <ul v-for="keyItem in item.KeyWords" :key="keyItem.Id">
-                            <li><a href="#">{{keyItem.Word}}</a></li>
+                        <h5 class="title">{{item.Publication.Name}}</h5>
+                        <!-- <input type="checkbox" class="show-text" id={item.Publication.Id} />
+                        <div class="limited l-300"> -->
+                            <p class="text">{{item.Publication.Text}}</p>
+                            <!-- <div class="bottom"></div>
+                        </div>
+                         <label for={item.Publication.Id} class="show-text-btn"></label> -->
+                        <ul class="nav-keyword">
+                            <li
+                                v-for="keyItem in item.Publication.KeyWords" 
+                                :key="keyItem.Id"
+                            >#{{keyItem.Word}}</li>
                         </ul>
                     </div>
                 </article>
@@ -41,6 +73,7 @@ export default {
         return {
             posts: null,
             loading: true,
+            showModal: false,
         }
     },
     async mounted() {
@@ -56,7 +89,7 @@ export default {
         .finally(() => {
             this.loading = false
         })
-        //console.log(localStorage.getItem('userName'))
+        console.log(this.posts[0].Publication)
     }
 }
 </script>
@@ -70,11 +103,12 @@ export default {
     }
 
     .blog-card {
+        position: relative;
         border: 1px solid rgb(235, 238, 240);
         box-sizing: border-box;
         padding: 20px;
         color: #000;
-        margin-bottom: -1px;
+        margin-bottom: 30px;
 
         &__head {
             display: flex;
@@ -99,9 +133,80 @@ export default {
             }
             .text {
                 text-align: left;
-                border-bottom: 1px solid rgb(235, 238, 240);
             }
         }
+    }
+
+    .nav-keyword {
+        display: flex;
+        list-style: none;
+        li {
+            color: rgb(57, 4, 182);
+            margin: 10px 5px;
+            cursor: pointer;
+
+            &:hover {
+                color: darken(rgb(57, 4, 182), 15%);
+            }
+        }
+    }
+
+    // модальне вікно
+
+    .show-modal {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        padding: 5px 0;
+        cursor: pointer;
+    }
+    .modal-ovarlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        padding: 20px;
+
+        width: 100%;
+        max-width: 800px;  
+        background-color: #fff; 
+
+        p {
+            text-align-last: left;
+            margin: 10px 0;
+        }
+    }
+
+    .hide-modal {
+        cursor: pointer;
+        padding: 10px;
+        color: #777;
+        border: 1px solid #ddd;
+        background: #fff;
+        border-radius: 4px;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s;
+    }
+
+    .fade-enter,
+    .fade-leave-to {
+        opacity: 0;
     }
 
     // Анімація загрузки
@@ -189,5 +294,51 @@ export default {
         100% {
             transform: rotate(360deg);
         }
+    }
+
+    // скрити/показати текст
+
+    .limited {
+        max-height: 400px;
+        overflow: hidden;
+        position: relative;
+    }
+     
+    .limited.l-300 {
+        max-height: 300px;
+    }
+    .limited .bottom {
+        position: absolute;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 80%);
+        width: 100%;
+        height: 60px;
+        opacity: 1;
+        transition: .3s;
+    }
+    .show-text {
+        opacity: 0;
+        position: absolute;
+    }
+    .show-text:checked ~ .limited {
+        max-height: none;
+    }
+    .show-text:checked ~ .limited .bottom {
+        opacity: 0;
+        transition: .3s;
+    }
+    .show-text ~ .show-text-btn:before {
+        content: 'Показати »';
+    }
+    .show-text:checked ~ .show-text-btn:before {
+        content: 'Скрити «';
+    }
+    .show-text-btn {
+        cursor: pointer;
+        display: inline-block;
+        padding: 10px;
+        color: #777;
+        border: 1px solid #ddd;
+        border-radius: 4px;
     }
 </style>

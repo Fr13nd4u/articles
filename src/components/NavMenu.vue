@@ -26,9 +26,6 @@ export default {
         }
     },
     created() {
-        // if (localStorage.getItem('access_token')) {
-        //     this.isUser = localStorage.getItem('userName');
-        // }
         localStorage.getItem('access_token') 
         ? this.isUser = `, ${localStorage.getItem('userName') }`
         : this.isUser = ''
@@ -48,6 +45,7 @@ export default {
         position: fixed; 
         top: 0; 
         width: 100%; 
+        z-index: 4;
 
         &-menu {
             display: flex;
@@ -58,21 +56,20 @@ export default {
                 color: #fff;
                 padding: 15px 20px;
             }
-        }
-    }
-
-    ul {
-        list-style: none;
-        display: flex;
-        justify-content: space-between;
-        width: 400px;
-        li{
-            text-transform: uppercase;
-            font-family: Roboto, sans-serif;
-            font-size: 18px;
-            color: #fff;
-            padding: 15px 20px;
-            cursor: pointer;
+            ul {
+                list-style: none;
+                display: flex;
+                justify-content: space-between;
+                width: 400px;
+                li{
+                    text-transform: uppercase;
+                    font-family: Roboto, sans-serif;
+                    font-size: 18px;
+                    color: #fff;
+                    padding: 15px 20px;
+                    cursor: pointer;
+                }
+            }
         }
     }
 </style>

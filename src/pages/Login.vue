@@ -51,33 +51,6 @@ export default {
       .catch(() => {
         this.showError = true;
       })
-      
-      // axios.post('https://diplommustafaiev.azurewebsites.net/token', {
-      //   userName: this.userName,
-      //   Password: this.Password,
-      //   grant_type: 'password'
-      // },{ 
-      //     headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded'
-      //   } 
-      // })
-      // .then(response => {
-      //   console.log(response)
-      // })
-      // .then(() => {
-      //   this.$router.push("Posts")
-      // })
-      // .catch(error => {
-      //   if (error.response) {
-      //     console.log(error.response.data);
-      //     console.log(error.response.status);
-      //     console.log(error.response.headers);
-      //   } else if (error.request) {
-      //     console.log(error.request);
-      //   } else {
-      //     console.log('Error', error.message);
-      //   }
-      // })
     }
   }
 }
