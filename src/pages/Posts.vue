@@ -4,7 +4,9 @@
             <h1>Публікації</h1>
             <div v-if="loading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
-            <div v-for="item in posts" :key="item.id">
+            <input type="text" v-model="search" placeholder="Пошук" />
+
+            <div v-for="item in filterdPosts" :key="item.id">
                 <article class="blog-card">
 
                     <button class="show-modal" id="show-modal" @click="showModal = true">
@@ -71,9 +73,10 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            posts: null,
+            posts: [],
             loading: true,
             showModal: false,
+            search: ''
         }
     },
     async mounted() {
@@ -89,7 +92,13 @@ export default {
         .finally(() => {
             this.loading = false
         })
-        console.log(this.posts[0].Publication)
+    },
+    computed: {
+        filterdPosts: function(){
+            return this.posts.filter(item => {
+                return item.Publication.Name.match(this.search) || item.Publication.Text.match(this.search);
+            }) 
+        }
     }
 }
 </script>
@@ -100,6 +109,18 @@ export default {
     }
     h1 {
         margin: 100px 0 30px 0;
+    }
+
+    input {
+        margin-bottom: 30px;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        padding: 10px;
+        border-radius: 10px;
+        width: 50%;
+
+        &:focus {
+        outline: none;
+        }
     }
 
     .blog-card {
