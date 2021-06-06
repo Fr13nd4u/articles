@@ -2,9 +2,9 @@
     <div>
         <div class="container">
             <h1>Публікації</h1>
-            <div v-if="loading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-
             <input type="text" v-model="search" placeholder="Пошук" />
+            <div v-if="loading" class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        
 
             <div v-for="item in filterdPosts" :key="item.id">
                 <article class="blog-card">
@@ -47,13 +47,11 @@
                         </div>
                     </div>
                     <div class="blog-card__info">
+                        <h5 class="title">Annotation</h5>
+                        <p >{{item.Publication.Annotation}}</p>
+                        <br>
                         <h5 class="title">{{item.Publication.Name}}</h5>
-                        <!-- <input type="checkbox" class="show-text" id={item.Publication.Id} />
-                        <div class="limited l-300"> -->
-                            <p class="text">{{item.Publication.Text}}</p>
-                            <!-- <div class="bottom"></div>
-                        </div>
-                         <label for={item.Publication.Id} class="show-text-btn"></label> -->
+                        <p class="text">{{item.Publication.Text}}</p>
                         <ul class="nav-keyword">
                             <li
                                 v-for="keyItem in item.Publication.KeyWords" 
@@ -96,7 +94,12 @@ export default {
     computed: {
         filterdPosts: function(){
             return this.posts.filter(item => {
-                return item.Publication.Name.match(this.search) || item.Publication.Text.match(this.search);
+                return item.Publication.Name.match(this.search) 
+                    || item.Publication.Text.match(this.search)
+                    || item.Publication.Annotation.match(this.search)
+                    || item.User.Name.match(this.search)
+                    || item.User.MiddleName.match(this.search)
+                    || item.User.Surname.match(this.search);
             }) 
         }
     }
@@ -109,6 +112,10 @@ export default {
     }
     h1 {
         margin: 100px 0 30px 0;
+    }
+    .container {
+        max-width: 1170px;
+        margin: auto;
     }
 
     input {
@@ -234,7 +241,10 @@ export default {
 
     .lds-roller {
         display: inline-block;
-        position: relative;
+        position: absolute;
+        top: 50%;
+        left: 50%;   
+        transform: translate(-50%, -50%);
         width: 80px;
         height: 80px;
     }
