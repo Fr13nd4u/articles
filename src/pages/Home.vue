@@ -113,8 +113,7 @@ export default {
         this.showError = true;
         console.log(err);
       })
-    },
-
+    }
   },
   async mounted() {
     await axios.get('Api/Journal/Get', { 

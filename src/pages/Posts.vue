@@ -60,7 +60,7 @@
                             >#{{keyItem.Word}}</li>
                         </ul>
                     </div>
-                    <button class="hide-modal" v-if="item.User.UserName === canRemove()" >Видалити</button>
+                    <button class="hide-modal" v-if="item.User.UserName === isOwner()" @click="onRemove(item.Publication.Id)">Видалити</button>
                 </article>
             </div>
         </div>
@@ -108,8 +108,19 @@ export default {
         }
     },
     methods: {
-        canRemove: function() {
+        isOwner: function() {
             return localStorage.getItem('userName');
+        },
+
+        async onRemove(id) {
+            await axios.delete('Api/Publication/Delete/' + id,
+            { headers: {
+                "Authorization" : `Bearer ${localStorage.getItem('access_token')}`
+            }
+            })
+            .then(() => {
+                window.location.reload();
+            })
         }
     }
 }
@@ -170,6 +181,7 @@ export default {
             }
             .text {
                 text-align: left;
+                margin-bottom: 20px;
             }
         }
     }
