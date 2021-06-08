@@ -30,10 +30,11 @@
                         <div class="modal" v-if="showModal" >
                             <h2>Додаткова інформація</h2>
                             <p>Журнал: {{item.Publication.Journal.Name}}</p>
+                            <p>Конференція: {{ item.Publication.Conference.Name}}</p>
+                            <p>Видавництво: {{ item.Publication.Publisher.Name}}</p>
                             <p>Мова: {{item.Publication.Language}}</p>
-                            <p>Посилання на статю web of science: <a href="#">{{item.Publication.WebOfScienceLink}}</a></p>
-                            <p>Посилання на статю sqopus: <a href="#">{{item.Publication.SqopusLink}}</a></p>
-                            <p>Конференція: {{item.Publication.Conference.Name}}</p>
+                            <p>Посилання на web of science: <a v-bind:href="item.Publication.WebOfScienceLink">{{item.Publication.WebOfScienceLink}}</a></p>
+                            <p>Посилання на sqopus: <a v-bind:href="item.Publication.SqopusLink">{{item.Publication.SqopusLink}}</a></p>
                             <p>Кількість сторінок: {{item.Publication.NumberOfPages}}</p>
                             <button class="hide-modal" @click="showModal = false">Закрити</button>
                         </div>
@@ -42,8 +43,8 @@
                     <div class="blog-card__head">
                         <h4 class="user">{{`${item.User.Name} ${item.User.MiddleName} ${item.User.Surname}`}}</h4>
                         <div class="time">
-                            <p>час: {{item.Publication.Date.slice(11,-5)}}</p>
-                            <p>дата: {{item.Publication.Date.slice(0, -11)}}</p>
+                            <p>час: {{item.Publication.Date.substr(11,5)}}</p>
+                            <p>дата: {{item.Publication.Date.slice(0, 10)}}</p>
                         </div>
                     </div>
                     <div class="blog-card__info">
@@ -59,6 +60,7 @@
                             >#{{keyItem.Word}}</li>
                         </ul>
                     </div>
+                    <button class="hide-modal" v-if="item.User.UserName === canRemove()" >Видалити</button>
                 </article>
             </div>
         </div>
@@ -83,7 +85,9 @@ export default {
                 "Authorization" : `Bearer ${localStorage.getItem('access_token')}`
             } 
         })
-        .then(res => (this.posts = res.data))
+        .then(res => {
+            this.posts = res.data;
+        })
         .catch(() => {
             this.$router.push("Login")
         })
@@ -101,6 +105,11 @@ export default {
                     || item.User.MiddleName.match(this.search)
                     || item.User.Surname.match(this.search);
             }) 
+        }
+    },
+    methods: {
+        canRemove: function() {
+            return localStorage.getItem('userName');
         }
     }
 }
@@ -211,10 +220,15 @@ export default {
         width: 100%;
         max-width: 800px;  
         background-color: #fff; 
+        z-index: 3;
 
         p {
             text-align-last: left;
             margin: 10px 0;
+            z-index: 1;
+            a {
+                display: flex;
+            }
         }
     }
 
