@@ -55,25 +55,31 @@
             <input type="text" v-model="publication.Language" id="Language" />
           </div>
         </div>
+
+        <div @submit.prevent="">
+          <form class="keywords">
+            <label for="KeyWords">Ключові слова:</label>
+            <input type="text" v-model="keyWord.Word" id="KeyWords" />
+            <button class="add" type="submit" @click="addKeyWord">додати</button>
+            <button class="rem" type="submit" @click="delKeyWord">видалити</button>
+            <ul>
+              <li v-for="item in publication.KeyWords" :key="item.id">#{{item.Word}}</li>
+            </ul>
+          </form>
+        </div>
         
         <button @click="formSubmit" type="submit">Створити</button>
       </form>
       <p v-if="showError" id="error">Ви неправильно ввели данні, попробуйте ще</p>
     </div>
 
-    <!-- <Posts/> -->
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-// import Posts from './Posts'
 
 export default {
-  // components: {
-  //   Posts
-  // },
-
   data(){
     return {
       publication: {
@@ -87,11 +93,15 @@ export default {
         NumberOfPages: "",
         Language: "",
         UserId: "",
-        PublicationTypeId: 1
+        PublicationTypeId: 1,
+        KeyWords: []
       },
       journals: [],
       conferences: [],
       publishers: [],
+      keyWord: {
+        Word: ""
+      },
       showError: false
     }
   },
@@ -113,6 +123,16 @@ export default {
         this.showError = true;
         console.log(err);
       })
+    },
+
+    addKeyWord: function(word) {
+      word = this.keyWord.Word;
+      this.publication.KeyWords.push({Word: word, Language: "English"});
+      this.keyWord.Word = '';
+    },
+
+    delKeyWord: function() {
+      this.publication.KeyWords.pop()
     }
   },
   async mounted() {
@@ -145,6 +165,20 @@ export default {
   h1 {
     margin: 100px 0 30px 0;
   }
+   ul {
+      list-style: none;
+      margin: 0;
+      li {
+        display: inline; /* Отображать как строчный элемент */
+        margin-right: 10px;
+        color: rgb(57, 4, 182);
+        cursor: pointer;
+
+        &:hover {
+            color: darken(rgb(57, 4, 182), 15%);
+        }
+      }
+    }
   .container {
     max-width: 1170px;
     margin: auto;
@@ -204,6 +238,30 @@ export default {
   .area-txt {
     height: 450px;
   }
+
+  .keywords {
+    button {
+      margin-left: 7px;
+      box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+      background: #fff;
+      padding: 7px;
+      border-radius: 10px;
+      &:hover {
+        background: #fff;
+      }
+    }
+    .add {
+      color: #45a049; 
+    }
+    .rem {
+      color: rgb(251, 36, 36); 
+    }
+  }
+
+  #KeyWords {
+    width: 72%;
+  }
+
   #error {
     color: rgb(230, 1, 1);
     margin: 30px 0;

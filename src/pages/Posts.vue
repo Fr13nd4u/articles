@@ -103,7 +103,7 @@ export default {
                     || item.Publication.Annotation.match(this.search)
                     || item.User.Name.match(this.search)
                     || item.User.MiddleName.match(this.search)
-                    || item.User.Surname.match(this.search);
+                    || item.User.Surname.match(this.search)
             }) 
         }
     },
